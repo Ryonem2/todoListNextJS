@@ -35,3 +35,6 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+#globalcss // tailwind css
+/style/globals.css
