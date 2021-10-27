@@ -4,11 +4,18 @@ const mysql = require("mysql");
 
 const app = express();
 
+// const conn = mysql.createConnection({
+//   host: process.env.DB_HOST,
+//   user: process.env.DB_username,
+//   password: process.env.DB_password,
+//   database: process.env.DB_DATABASE,
+// });
+
 const conn = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_username,
-  password: process.env.DB_password,
-  database: process.env.DB_DATABASE,
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "datatest",
 });
 
 conn.connect((err) => {
@@ -35,7 +42,7 @@ app.post("/insertdata", (req, res) => {
 });
 
 app.get("/showdata", (req, res) => {
-  conn.query("SELECT * FROM data", (err, result) => {
+  conn.query("SELECT * FROM todoList", (err, result) => {
     err ? console.log(err) : res.send(result);
   });
 });
