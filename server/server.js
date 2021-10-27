@@ -23,13 +23,11 @@ app.use(cors());
 app.use(express.json());
 
 app.post("/insertdata", (req, res) => {
-  const name = req.body.listContent;
-//   const comment = req.body.;
-  const comment = req.body.comment;
-  console.log(name);
-  console.log(comment);
+  const data = req.body.listContent;
+  const date = req.body.date;
+  const key = req.body.key;
   conn.query(
-    `INSERT INTO data (Name,Comment) VALUES ('${name}','${comment}')`,
+    `INSERT INTO todolist (listcontent,isImportent,date,keyforli) VALUES ('${data}',0,'${date}','${key}')`,
     (err, result) => {
       err ? console.log(err) : console.log("inserted");
     }
