@@ -24,7 +24,7 @@ app.use(express.json());
 
 app.post("/insertdata", (req, res) => {
   const name = req.body.listContent;
-  const comment = req.body.;
+//   const comment = req.body.;
   const comment = req.body.comment;
   console.log(name);
   console.log(comment);
