@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Navbar from "../components/Navbar";
-import Content from "../components/content";
+import Content from "../components/Content";
 const num: string | undefined = process.env.PORT;
 
 const Home: NextPage = () => {

@@ -4,31 +4,32 @@ import axios from "axios";
 export default function Content() {
   const [inputData, setInputData] = useState("");
   const [check, setCheck] = useState("");
+  const [dataList, setDataList] = useState<List[]>([]);
   //   const data: string[] = [];
   const d = new Date();
   let key: number = 1;
 
-  useEffect(async () => {
-    const result: unknown[] = await axios.get("http://localhost:8080/showdata");
-  }, []);
-
-  type listData<T> = {
-    [Property in keyof T]: T[Property];
-  };
-
-  type dataFromDatabase = {
+  // type get<T = never, R = AxiosResponse<T>>(url: string, config?: AxiosRequestConfig<T>): Promise<R>;
+  interface List {
     id: number;
-    listContent: string;
-    isImportent: boolean;
+    listcontent: string;
+    isimportant: boolean;
     date: number;
     key: number;
-  };
+  }
 
-  type list = listData<dataFromDatabase>;
+  useEffect(() => {
+    axios.get<List[]>(`http://localhost:8080/showdata`).then((res) => {
+      setDataList(res.data);
+      console.log(res.data);
+    });
+    console.log("UseEffect Activated");
+  }, []);
 
   const setKeyDown = (e: any): void => {
     setInputData(e.target.value);
   };
+
   const insertData = async () => {
     try {
       const res = await axios.post("http://localhost:8080/insertdata", {
@@ -46,26 +47,38 @@ export default function Content() {
     if (!!inputData) {
       await insertData();
       key++;
+      getData();
       return;
     }
     setCheck("You input incorrectly");
   };
 
-  const getData = async (): Promise<any> => {
-    try {
-      const result = await axios.get("http://localhost:8080/showdata");
-      //   console.log(result);
-      return result.data.listcontent;
-    } catch (e) {
-      console.error(e);
-    }
+  const getData = () => {
+    axios.get<List[]>(`http://localhost:8080/showdata`).then((response) => {
+      console.log(response.data);
+      setDataList(response.data);
+    });
+    console.log(dataList);
   };
 
-  const listDatas = getData();
+  const ListElem = dataList.map((list) => {
+    return (
+      <>
+        <li
+          className="my-3 py-2 text-gray-500 text-xl font-semibold border-b-2 border-gray-300"
+          key={list.key}
+        >
+          {list.listcontent}
+        </li>
 
-  const listData = listDatas.map((list: string) => {
-    return list;
+        <span className=" text-red-500 hover:text-red-300 cursor-pointer">
+          X
+        </span>
+      </>
+    );
   });
+
+  // console.log(ListElem);
 
   return (
     <div className="container mx-auto">
@@ -94,7 +107,9 @@ export default function Content() {
 
       <hr className="w-4/5 h-1 my-6" />
 
-      <section>{/* <div>{listDatas}</div> */}</section>
+      <div className="flex justify-between">
+        <ul>{ListElem}</ul>
+      </div>
     </div>
   );
 }

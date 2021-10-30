@@ -29,12 +29,18 @@ conn.connect((err) => {
 app.use(cors());
 app.use(express.json());
 
+// app.use("/", (req, res) => {
+//   res.send(
+//     "<h1>Hello</h1><br> <a href='http://localhost:8080/showdata'>click</a>"
+//   );
+// });
+
 app.post("/insertdata", (req, res) => {
   const data = req.body.listContent;
   const date = req.body.date;
   const key = req.body.key;
   conn.query(
-    `INSERT INTO todolist (listcontent,isImportent,date,keyforli) VALUES ('${data}',0,'${date}','${key}')`,
+    `INSERT INTO todolist (listcontent,isimportant,date,keyforli) VALUES ('${data}',TRUE,'${date}','${key}')`,
     (err, result) => {
       err ? console.log(err) : console.log("inserted");
     }
