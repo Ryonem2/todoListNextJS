@@ -29,12 +29,6 @@ conn.connect((err) => {
 app.use(cors());
 app.use(express.json());
 
-// app.use("/", (req, res) => {
-//   res.send(
-//     "<h1>Hello</h1><br> <a href='http://localhost:8080/showdata'>click</a>"
-//   );
-// });
-
 app.post("/insertdata", (req, res) => {
   const data = req.body.listContent;
   const date = req.body.date;
@@ -42,7 +36,20 @@ app.post("/insertdata", (req, res) => {
   conn.query(
     `INSERT INTO todolist (listcontent,isimportant,date,keyforli) VALUES ('${data}',TRUE,'${date}','${key}')`,
     (err, result) => {
-      err ? console.log(err) : console.log("inserted");
+      err ? console.log(err) : console.log("inserted " + data);
+    }
+  );
+});
+
+app.delete("/delete/:id", (req, res) => {
+  const id = req.params.id;
+  // console.log(id);
+  conn.query(
+    `DELETE FROM todolist WHERE id = ${id}`,
+    (err, { serverStatus }) => {
+      err
+        ? console.log(err)
+        : console.log(`Deleted id = ${id} Status ${serverStatus}`);
     }
   );
 });

@@ -44,6 +44,7 @@ export default function Content() {
   };
   const setData = async (): Promise<void> => {
     setCheck("");
+    setInputData("");
     if (!!inputData) {
       await insertData();
       key++;
@@ -61,20 +62,37 @@ export default function Content() {
     console.log(dataList);
   };
 
+  const delList = (id: number) => (event: any) => {
+    try {
+      axios
+        .delete<number>(`http://localhost:8080/delete/${id}`, {
+          data: id,
+        })
+        .then((response) => {
+          console.log(response.data);
+        });
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const ListElem = dataList.map((list) => {
     return (
-      <>
-        <li
-          className="my-3 py-2 text-gray-500 text-xl font-semibold border-b-2 border-gray-300"
-          key={list.key}
-        >
+      <div
+        className="border-b-2 border-gray-300 flex justify-between items-center"
+        key={list.key}
+      >
+        <p className="my-3 py-1 text-gray-500 text-xl font-semibold ">
           {list.listcontent}
-        </li>
+        </p>
 
-        <span className=" text-red-500 hover:text-red-300 cursor-pointer">
+        <button
+          onClick={delList(list.id)}
+          className="font-semibold text-xl text-red-500 hover:text-red-300 cursor-pointer"
+        >
           X
-        </span>
-      </>
+        </button>
+      </div>
     );
   });
 
@@ -92,6 +110,7 @@ export default function Content() {
             type="text"
             placeholder="Type Here..."
             onChange={setKeyDown}
+            value={inputData}
           />
           {/* <input type="text" /> */}
           <small className="text-red-500">{check}</small>
@@ -107,9 +126,7 @@ export default function Content() {
 
       <hr className="w-4/5 h-1 my-6" />
 
-      <div className="flex justify-between">
-        <ul>{ListElem}</ul>
-      </div>
+      <div className="">{ListElem}</div>
     </div>
   );
 }
