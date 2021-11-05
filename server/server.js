@@ -52,6 +52,7 @@ app.delete("/delete/:id", (req, res) => {
         : console.log(`Deleted id = ${id} Status ${serverStatus}`);
     }
   );
+  res.send("hello");
 });
 
 app.get("/showdata", (req, res) => {
